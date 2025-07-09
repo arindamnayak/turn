@@ -71,6 +71,7 @@ func (r *RelayAddressGeneratorPortRange) Validate() error {
 // to populate the allocation response with.
 func (r *RelayAddressGeneratorPortRange) AllocatePacketConn(
 	network string,
+	srcAddr net.Addr,
 	requestedPort int,
 ) (net.PacketConn, net.Addr, error) {
 	if requestedPort != 0 {
