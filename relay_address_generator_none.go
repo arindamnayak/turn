@@ -40,7 +40,7 @@ func (r *RelayAddressGeneratorNone) Validate() error {
 
 // AllocatePacketConn generates a new PacketConn to receive traffic on and the IP/Port
 // to populate the allocation response with.
-func (r *RelayAddressGeneratorNone) AllocatePacketConn(network string, requestedPort int) (
+func (r *RelayAddressGeneratorNone) AllocatePacketConn(network string, srcAddr net.Addr, requestedPort int) (
 	net.PacketConn,
 	net.Addr,
 	error,

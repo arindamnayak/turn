@@ -15,7 +15,7 @@ import (
 // ManagerConfig a bag of config params for Manager.
 type ManagerConfig struct {
 	LeveledLogger      logging.LeveledLogger
-	AllocatePacketConn func(network string, requestedPort int) (net.PacketConn, net.Addr, error)
+	AllocatePacketConn func(network string, srcAddr net.Addr, requestedPort int) (net.PacketConn, net.Addr, error)
 	AllocateConn       func(network string, requestedPort int) (net.Conn, net.Addr, error)
 	PermissionHandler  func(sourceAddr net.Addr, peerIP net.IP) bool
 }
@@ -33,7 +33,7 @@ type Manager struct {
 	allocations  map[FiveTupleFingerprint]*Allocation
 	reservations []*reservation
 
-	allocatePacketConn func(network string, requestedPort int) (net.PacketConn, net.Addr, error)
+	allocatePacketConn func(network string, srcAddr net.Addr, requestedPort int) (net.PacketConn, net.Addr, error)
 	allocateConn       func(network string, requestedPort int) (net.Conn, net.Addr, error)
 	permissionHandler  func(sourceAddr net.Addr, peerIP net.IP) bool
 }
@@ -113,7 +113,7 @@ func (m *Manager) CreateAllocation(
 	}
 	alloc := NewAllocation(turnSocket, fiveTuple, m.log)
 
-	conn, relayAddr, err := m.allocatePacketConn("udp4", requestedPort)
+	conn, relayAddr, err := m.allocatePacketConn("udp4", fiveTuple.SrcAddr, requestedPort)
 	if err != nil {
 		return nil, err
 	}
@@ -193,7 +193,7 @@ func (m *Manager) GetReservation(reservationToken string) (int, bool) {
 // GetRandomEvenPort returns a random un-allocated udp4 port.
 func (m *Manager) GetRandomEvenPort() (int, error) {
 	for i := 0; i < 128; i++ {
-		conn, addr, err := m.allocatePacketConn("udp4", 0)
+		conn, addr, err := m.allocatePacketConn("udp4", nil, 0)
 		if err != nil {
 			return 0, err
 		}
