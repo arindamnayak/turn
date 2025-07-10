@@ -39,7 +39,7 @@ func (r *RelayAddressGeneratorNone) Validate() error {
 }
 
 // AllocatePacketConn generates a new PacketConn to receive traffic on and the IP/Port to populate the allocation response with
-func (r *RelayAddressGeneratorNone) AllocatePacketConn(network string, requestedPort int) (net.PacketConn, net.Addr, error) {
+func (r *RelayAddressGeneratorNone) AllocatePacketConn(network string, srcAddr net.Addr, requestedPort int) (net.PacketConn, net.Addr, error) {
 	conn, err := r.Net.ListenPacket(network, r.Address+":"+strconv.Itoa(requestedPort))
 	if err != nil {
 		return nil, nil, err

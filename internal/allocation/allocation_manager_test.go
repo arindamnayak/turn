@@ -179,7 +179,7 @@ func newTestManager() (*Manager, error) {
 
 	config := ManagerConfig{
 		LeveledLogger: loggerFactory.NewLogger("test"),
-		AllocatePacketConn: func(network string, requestedPort int) (net.PacketConn, net.Addr, error) {
+		AllocatePacketConn: func(network string, srcAddr net.Addr, requestedPort int) (net.PacketConn, net.Addr, error) {
 			conn, err := net.ListenPacket("udp4", "0.0.0.0:0")
 			if err != nil {
 				return nil, nil, err
