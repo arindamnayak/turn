@@ -151,7 +151,7 @@ func (m *Manager) DeleteAllocation(fiveTuple *FiveTuple) {
 	allocation := m.allocations[fingerprint]
 	if m.userCounts != nil && allocation != nil {
 		m.userCounts[allocation.username] -= 1
-		if m.userCounts[allocation.username] == 0 {
+		if m.userCounts[allocation.username] < 1 {
 			delete(m.userCounts, allocation.username)
 		}
 	}
